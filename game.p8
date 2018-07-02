@@ -1,6 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 16
 __lua__
+-- my game
 function _init()
 	player={x=64,y=64,spr=1}
  frames=0
