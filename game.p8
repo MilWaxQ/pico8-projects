@@ -3,7 +3,7 @@ version 16
 __lua__
 -- my game
 function _init()
-	player={x=64,y=64,spr=1}
+ player={x=64,y=64,spr=1}
  frames=0
  secs=0
  eadd(flr(rnd(128)),flr(rnd(128)))
@@ -13,12 +13,13 @@ function _update()
 	frames+=1
 	if (frames%30==0) secs+=1
  
-	
 	if (btn(0)) player.x-=1  
 	if (btn(1)) player.x+=1
 	if (btn(2)) player.y-=1
 	if (btn(3)) player.y+=1
-	if btn()==0 or btn()==32 or btn()==16 or btn()==48 then 
+  if (btnp(5)) badd(player.x+10,player.y+4) -- shoot a bullet
+
+	if btn()==0 or btn()==32 or btn()==16 or btn()==48 then -- if the player is not moving
 	 player.spr=1 
 	else 
 	 if frames%10==0 and player.spr!=2 then
@@ -27,18 +28,17 @@ function _update()
    player.spr=3
   end
  end
- if (btnp(5)) badd(player.x+10,player.y+4)
+ 
  foreach(bullets,bupdate)
 end
 
 function _draw()
  cls()
  spr(player.spr,player.x,player.y)
- cursor(0,0)
- print(frames)
- print(secs)
  foreach(enemies,edraw)
  foreach(bullets,bdraw)
+
+ --debug()
 end
 -->8
 -- bullets
@@ -88,6 +88,13 @@ end
 
 function edraw(e)
 	spr(4,e.x,e.y)
+end
+-->8
+-- helpers
+function debug()
+ cursor(0,0)
+ print(frames)
+ print(secs)
 end
 __gfx__
 00000000888888888888888888888888555555550000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
