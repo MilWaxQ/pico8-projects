@@ -1,6 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 16
 __lua__
+-- game
 function _init()
 player={x=64,y=64,spr=1,steps=0}
 end
@@ -11,6 +12,7 @@ function _update60()
 	if btn(1) then player.x+=1 end
 	if btn(2) then player.y-=1 end
 	if btn(3) then player.y+=1 end
+ if btnp(5) then badd(player.x+12,player.y+10) end
 
  if btn(0) or btn(1) or btn(2) or btn(3) then
   player.steps+=1
@@ -23,13 +25,38 @@ function _update60()
   end
  else player.spr=1 player.steps=0
  end
+ foreach(bullets,bupdate)
 end
 
 function _draw()
 cls()
 	spr(player.spr,player.x,player.y,1,2)
 	cursor(0,0)
- print(player.steps)
+ print(#bullets)
+ foreach (bullets,bdraw)
+end
+-->8
+-- bullets
+bullets={}
+
+function badd(_x,_y)
+ add(bullets,{
+  x=_x,
+  y=_y
+ })
+end
+
+function bupdate(b)
+ if b.x>133 then
+  del(bullets,b)
+ else
+  b.x+=2
+ end
+end
+
+function bdraw(b)
+ line(b.x-6,b.y,b.x,b.y,10)
+ pset(b.x,b.y,4)
 end
 __gfx__
 00000000888888888888888888888888000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
