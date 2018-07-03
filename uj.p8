@@ -21,7 +21,7 @@ function _update60()
     player.spr=3
    end
   end
- else player.spr=1
+ else player.spr=1 player.steps=0
  end
 end
 
