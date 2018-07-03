@@ -6,7 +6,12 @@ player={x=64,y=64,spr=1}
 end
 
 function _update60()
-	if btn(0) then player.x-=1	end
+	if btn(0) then
+	 player.x-=1
+  if player.spr!=2 then
+   player.spr=2
+  end 
+	end
 	if btn(1) then player.x+=1 end
 	if btn(2) then player.y-=1 end
 	if btn(3) then player.y+=1 end
