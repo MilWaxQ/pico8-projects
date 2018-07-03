@@ -2,24 +2,34 @@ pico-8 cartridge // http://www.pico-8.com
 version 16
 __lua__
 function _init()
-player={x=64,y=64,spr=1}
+player={x=64,y=64,spr=1,steps=0}
 end
 
 function _update60()
-	if btn(0) then
-	 player.x-=1
-  if player.spr!=2 then
-   player.spr=2
-  end 
-	end
+ player.steps+=1
+	if btn(0) then player.x-=1 end
 	if btn(1) then player.x+=1 end
 	if btn(2) then player.y-=1 end
 	if btn(3) then player.y+=1 end
+
+ if btn(0) or btn(1) or btn(2) or btn(3) then
+  player.steps+=1
+  if player.steps%20==0 then
+   if player.spr!=2 then
+    player.spr=2
+   elseif player.spr!=3 then
+    player.spr=3
+   end
+  end
+ else player.spr=1
+ end
 end
 
 function _draw()
 cls()
 	spr(player.spr,player.x,player.y,1,2)
+	cursor(0,0)
+ print(player.steps)
 end
 __gfx__
 00000000888888888888888888888888000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
