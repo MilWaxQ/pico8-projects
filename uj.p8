@@ -27,7 +27,7 @@ function _init()
 	--boss=0 -- unnecessary, can be deleted
 	
 	s=0 -- radius of first circle in the starting animation
-  f=0 -- radius of second circle in the starting animation
+ f=0 -- radius of second circle in the starting animation
 	xx=128 -- right x coordinate of the starting rectangle animation
 	shaking=0
 	pal()
@@ -61,20 +61,10 @@ function gameupdate()
 	--boss=1 -- unnecessary, can be deleted
  end
  
- if btn(0) then 
-	player.x-=1 
-	player.flip=true 
- end
-	if btn(1) then 
-	 player.x+=1 
-	 player.flip=false 
-	end
-	if btn(2) then 
-	 player.y-=1 
-	end
-	if btn(3) then 
-	 player.y+=1 
-	end
+ if (btn(0)) player.x-=1 player.flip=true 
+	if (btn(1)) player.x+=1 player.flip=false 
+	if (btn(2)) player.y-=1
+ if (btn(3)) player.y+=1
 	
  if btnp(5) then
  	if not player.flip then
@@ -93,24 +83,27 @@ function gameupdate()
     player.spr=3
    end
   end
- else player.spr=1 player.steps=0
+ else 
+  player.spr=1 
+  player.steps=0
  end
+
  foreach(bullets,bupdate)
  foreach(enemies,eupdate)
  foreach(items,iupdate)
  foreach(shield,supdate)
  
- if btnp(4) and btn(0) then for i=1,25 do player.x-=1 trail(player.x,player.y) end end
- if btnp(4) and btn(1) then for i=1,25 do player.x+=1 trail(player.x,player.y) end end
- if btnp(4) and btn(2) then for i=1,25 do player.y-=1 trail(player.x,player.y) end end
- if btnp(4) and btn(3) then for i=1,25 do player.y+=1 trail(player.x,player.y) end end
+ if (btnp(4) and btn(0)) for i=1,25 do player.x-=1 trail(player.x,player.y) end
+ if (btnp(4) and btn(1)) for i=1,25 do player.x+=1 trail(player.x,player.y) end
+ if (btnp(4) and btn(2)) for i=1,25 do player.y-=1 trail(player.x,player.y) end
+ if (btnp(4) and btn(3)) for i=1,25 do player.y+=1 trail(player.x,player.y) end
  
  if btnp(4) then
  	shaking=1
+  player.dash=true
   for i=1,50 do
    trail(player.x,player.y)
   end
-  player.dash=true
  else
   player.dash=false
  end
@@ -128,7 +121,6 @@ function gamedraw()
  shake()
  spr(player.spr,player.x,player.y,1,2,player.flip)
  if (btn(2) or btn(3)) spr(1,player.x,player.y)
-	cursor(0,0)
  foreach(bullets,bdraw)
  foreach(enemies,edraw)
  foreach(items,idraw)
@@ -148,8 +140,7 @@ function gamedraw()
 	if player.flip==false then spr(10,player.x+10,player.y+5)
  elseif player.flip==true then spr(11,player.x-10,player.y+5) 	
  end
- ?player.dash,0,0,7
- rectfill(-128,0,xx,128,12)
+ rectfill(-128,0,xx,128,12) -- starting animation's rectangle
 end
 -->8
 -- bullets
@@ -180,7 +171,7 @@ function bupdate(b)
  end
  
  if b.id=="enemy" then
-  if (b.x>=player.x and player.x+7>=b.x and b.y>=player.y and b.y<=player.y+15)  player.hp-=1 del(bullets,b)
+  if (b.x>=player.x and player.x+7>=b.x and b.y>=player.y and b.y<=player.y+15) player.hp-=1 del(bullets,b)
  end
 end
 
@@ -210,19 +201,15 @@ function eupdate(e)
 	e.t+=1
 	
 	if e.tpe==3 and e.canmove==0 and player.dash==true then
-		if e.x+8>=player.x and e.x<=player.x+8
-	 and e.y+14>=player.y and e.y<=player.y+14
-	 then 
+		if e.x+8>=player.x and e.x<=player.x+8 and e.y+14>=player.y and e.y<=player.y+14 then 
 	 	del(enemies,e) 
 		end
 	end
-	
 	
 	if e.tpe==3 and e.hp<=0 then
 		e.canmove=0
 		e.hp=0
 	end
-	
 
 	local move=flr(rnd(4))
 	
@@ -234,17 +221,20 @@ function eupdate(e)
  end
  
  for b in all(bullets) do
-  if b.x-1>=e.x and b.x-1<=e.x+14
- and b.y>=e.y and b.y<=e.y+15 and e.tpe==1 and b.id=="player"
- then del(bullets,b) e.hp-=1
- 	elseif b.x>=e.x and b.x<=e.x+14 and b.y>=e.y and b.y<=e.y+14 and player.x<e.x and (e.tpe==2 or e.tpe==3)
-  then del(bullets,b)
-  elseif b.x>=e.x and b.x<=e.x+14 and b.y>=e.y and b.y<=e.y+14
-  then del(bullets,b) e.hp-=1
+  if b.x-1>=e.x and b.x-1<=e.x+14 and b.y>=e.y and b.y<=e.y+15 and e.tpe==1 and b.id=="player" then 
+   del(bullets,b) 
+   e.hp-=1
+ 	elseif b.x>=e.x and b.x<=e.x+14 and b.y>=e.y and b.y<=e.y+14 and player.x<e.x and (e.tpe==2 or e.tpe==3) then 
+   del(bullets,b)
+  elseif b.x>=e.x and b.x<=e.x+14 and b.y>=e.y and b.y<=e.y+14 then 
+   del(bullets,b) 
+   e.hp-=1
   end
- 	if e.hp==0 and e.tpe==1 then del(enemies,e) end
- 	if e.hp==0 and e.tpe==2 then del(enemies,e) end
+
+ 	if (e.hp==0 and e.tpe==1) del(enemies,e)
+ 	if (e.hp==0 and e.tpe==2) del(enemies,e)
  end
+
  if player.y>=e.y and player.y<=e.y+14 and e.tpe==1 and e.t%60==0 then
  	if player.x>=e.x+14 then
  	 badd(e.x+13,e.y+7,false,"enemy")
@@ -260,7 +250,6 @@ function eupdate(e)
  	 badd(e.x-1,e.y+7,true,"enemy")
 		end
  end
- 
 end
 
 function edraw(e)
@@ -336,22 +325,10 @@ function drawtrails()
 	end
 end
 
-
-			
-			
-			
-			
-			
-
-
-
-
-
-
 -->8
 -- game over
 function goupdate()
- if btn(5) and btn(0) then _init() end
+ if (btn(5) and btn(0))  _init()
 end
 
 function godraw()
@@ -380,11 +357,11 @@ function _draw()
 	end
 end
 -->8
-
+-- starting animation
 function rectupdate()
-s+=5
-f+=3
-if (f/2>91) mode="game"
+ s+=5
+ f+=3
+ if (f/2>91) mode="game"
 end
 
 function rectdraw()
@@ -394,8 +371,6 @@ function rectdraw()
 end
 
 --shield
--- items
-
 shield={}
 
 function sadd()
@@ -406,7 +381,6 @@ function sadd()
 end
 
 function supdate(s)
-
 	if s.x+8>=player.x and s.x<=player.x+7 and s.y+14>=player.y and s.y<=player.y+14 then
 			shieldmenet+=1
 			del(shield,s)
