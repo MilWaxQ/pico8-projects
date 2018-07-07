@@ -30,12 +30,19 @@ function _init()
  f=0 -- radius of second circle in the starting animation
 	xx=128 -- right x coordinate of the starting rectangle animation
 	shaking=0
+ sht=0 -- delay between shots
 	pal()
 end
 
 function gameupdate()
  t+=1
  if t>=60 then t=0 end
+
+ if sht>0 then
+  if t%60==0 then
+   sht-=0.5
+  end
+ end
 
  if shieldmenet==1 and st>=1 then 
  	if (t%60==0) st-=1
@@ -66,7 +73,8 @@ function gameupdate()
 	if (btn(2)) player.y-=1
  if (btn(3)) player.y+=1
 	
- if btnp(5) then
+ if btnp(5) and sht==0 then
+  sht+=0.5
  	if not player.flip then
  		badd(player.x+12,player.y+10,false,"player") 
  	else
@@ -136,6 +144,7 @@ function gamedraw()
    spr(15,2+i*9,2)
   end
  end
+ print(sht,0,15,7)
  --rect(player.x,player.y,player.x+8,player.y+16)
 	if player.flip==false then spr(10,player.x+10,player.y+5)
  elseif player.flip==true then spr(11,player.x-10,player.y+5) 	
