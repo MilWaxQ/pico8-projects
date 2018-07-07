@@ -7,67 +7,64 @@ function _init()
 	 x=64,
 	 y=64,
 	 spr=1,
-	 steps=0,
+	 steps=0, -- step counter
 	 flip=false,
 	 hp=2,
-	 dash=false
+	 dash=false -- true while dashing, used for enemies only killable when dashign
 	}
+  
 	for e in all(enemies) do
 	 del(enemies,e)
 	end
+  
 	eadd(3,1)
-	enemy=1
-	mode="rect"
+	enemy=1 -- poorly named round counter
+	mode="rect" -- rect == starting animation
 	sadd()
 	t=0
-	st=0
-	shieldmenet=0
-	boss=0
+	st=0 -- shield timer
+	shieldmenet=0 -- when equals to 1 enables shield timer
+	--boss=0 -- unnecessary, can be deleted
 	
-	s=0
- f=0
-	xx=128
+	s=0 -- radius of first circle in the starting animation
+  f=0 -- radius of second circle in the starting animation
+	xx=128 -- right x coordinate of the starting rectangle animation
 	shaking=0
 	pal()
 end
 
 function gameupdate()
-t+=1
-if t>=60 then t=0 end
-
+ t+=1
+ if t>=60 then t=0 end
 
  if shieldmenet==1 and st>=1 then 
- 	if t%60==0 then st-=1
-	 end
+ 	if (t%60==0) st-=1
  end
  
-	if player.hp==3 then st=-1 end
+ if (player.hp==3) st=-1
 
-
- if player.hp>3 then
-			pal(8,12)
-			pal(15,12)
- end
- if st==0 then player.hp=3 shieldmenet=0 pal() end
- 
-	if player.hp<=3 then pal() end
-	if player.hp<3 and #enemies==0 then iadd() sadd() end
+ if (player.hp>3) pal(8,12) pal(15,12)
+ if (st==0) player.hp=3 shieldmenet=0 pal()
+ if (player.hp<=3) pal()
+          
+ if (player.hp<3 and #enemies==0) iadd() sadd()
  if (xx>-50) xx-=2
-	if (#enemies==0) pal() enemy+=1 shaking=1 eadd(3,enemy)
-	if (#enemies==5) then 
-	 pal(5,10)
-	 enemy=1
-	 for e in all(enemies) do
-			del(enemies,e)
-		end
-		eadd(10,enemy,3)
-		boss=1
+                
+ if (#enemies==0) pal() enemy+=1 shaking=1 eadd(3,enemy)
+ if (#enemies==5) then 
+  pal(5,10)
+  enemy=1
+	for e in all(enemies) do
+	 del(enemies,e)
+  end
+  eadd(10,enemy,3)
+	--boss=1 -- unnecessary, can be deleted
  end
  
-	if btn(0) then 
-	 player.x-=1 
-	 player.flip=true 
-	end
+ if btn(0) then 
+	player.x-=1 
+	player.flip=true 
+ end
 	if btn(1) then 
 	 player.x+=1 
 	 player.flip=false 
