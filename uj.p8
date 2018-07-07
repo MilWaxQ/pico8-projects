@@ -240,7 +240,7 @@ function eupdate(e)
   if b.x-1>=e.x and b.x-1<=e.x+14
  and b.y>=e.y and b.y<=e.y+15 and e.tpe==1 and b.id=="player"
  then del(bullets,b) e.hp-=1
- 	elseif b.x>=e.x and b.x<=e.x+14 and b.y>=e.y and b.y<=e.y+14 and player.x<e.x and e.tpe==2
+ 	elseif b.x>=e.x and b.x<=e.x+14 and b.y>=e.y and b.y<=e.y+14 and player.x<e.x and (e.tpe==2 or e.tpe==3)
   then del(bullets,b)
   elseif b.x>=e.x and b.x<=e.x+14 and b.y>=e.y and b.y<=e.y+14
   then del(bullets,b) e.hp-=1
