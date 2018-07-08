@@ -15,7 +15,7 @@ function _init()
   
 	for e in all(enemies) do
 	 del(enemies,e)
-	end
+	end 
   
 	eadd(3,1)
 	enemy=1 -- poorly named round counter
